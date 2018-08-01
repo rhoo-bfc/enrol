@@ -89,17 +89,22 @@ Route::post('/enrollee/status/{id}', function ($id) {
                        */
                     }
                     
-                }
-           
-                $allocation = new \App\Models\Allocate();
-                $enrollee = $allocation->getNextInWaitingList( Request::instance()->session()->get('ats_que_id') );
-
-                if ( $enrollee ) {		
-                     $allocation->createAllocation( Request::instance()->session()->get('ats_id') , $enrollee->reg_id );
-                }
+                }               
             
            }
            
+        }
+        if ($assignment->asn_stats === 'NEX'){
+
+            $allocation = new \App\Models\Allocate();
+            $enrollee = $allocation->getNextInWaitingList( Request::instance()->session()->get('ats_que_id') );
+
+            if ( $enrollee ) {      
+                $allocation->createAllocation( Request::instance()->session()->get('ats_id') , $enrollee->reg_id );
+            }
+
+           $action = 'REFRESH';
+
         } else {
 
             $assignment->save();

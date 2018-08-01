@@ -407,12 +407,14 @@ $(document).ready(function() {
         if ( action === 'COM' ) {
 
             $('[data-action=FAI]').addClass('disabled');
+            $('[data-action=NEX]').removeClass('disabled');
             reason = null;
         }
 
         if ( action === 'FAI' ) {
 
             $('[data-action=COM]').addClass('disabled');
+            $('[data-action=NEX]').removeClass('disabled');
             if ( notes === '' ) {
                 $('#notesModal').foundation('open');
                 return;
