@@ -120,28 +120,33 @@
 <input type="hidden" name="id" value="{{ $enrollee->asn_id }}" />
 <div class="row">
     
-    <div class="small-12 large-3 columns">
+    <div class="small-12 large-6 columns">
         
         <a class="secondary button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="STA" >Started <br />Enrolment</a>       
         
     </div>
-    
-    <div class="small-12 large-3 columns">
+
+    <div class="small-12 large-6 columns">
         
-            <a class="button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="NOS" >No <br />Show</a>      
-        
-    </div>
-    
-    
-    <div class="small-12 large-3 columns">
-        
-             <a class="success mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="COM" >Enrolment <br />Completed&nbsp;</a>
+        <a class="success mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="COM" >Enrolment <br />Completed&nbsp;</a>
            
     </div>
     
-    <div class="small-12 large-3 columns">
+    <div class="small-12 large-4 columns">
         
-              <a class="warning mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="FAI" >Unable to <br />Enrol</a>
+        <a class="button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="NOS" >No <br />Show</a>      
+        
+    </div>
+    
+    <div class="small-12 large-4 columns">
+        
+        <a class="secondary mega-button button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="NEX" >Next <br />Enrolee</a>
+         
+    </div>
+
+    <div class="small-12 large-4 columns">
+        
+        <a class="warning mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="FAI" >Unable to <br />Enrol</a>
          
     </div>
     
