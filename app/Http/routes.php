@@ -65,7 +65,6 @@ Route::post('/enrollee/status/{id}', function ($id) {
            ) {
 
            $assignment->asn_completed_ts = DB::raw('NOW()');
-           $action = 'REFRESH';
            if ( $assignment->save() ) {
                  
                
