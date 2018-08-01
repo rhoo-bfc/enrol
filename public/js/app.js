@@ -393,6 +393,7 @@ $(document).ready(function() {
         if ( action === 'STA' ) {
 
             $('[data-action=NOS]').addClass('disabled');
+            $('[data-action=NEX]').addClass('disabled');
             $('[data-action=COM]').removeClass('disabled');
             $('[data-action=FAI]').removeClass('disabled');
             reason = null;
@@ -401,11 +402,13 @@ $(document).ready(function() {
         if ( action === 'NOS' ) {
 
             $('[data-action=STA]').addClass('disabled');
+            $('[data-action=NEX]').removeClass('disabled');
             reason = null;
         }
 
         if ( action === 'COM' ) {
 
+            $('[data-action=STA]').addClass('disabled');
             $('[data-action=FAI]').addClass('disabled');
             $('[data-action=NEX]').removeClass('disabled');
             reason = null;
@@ -413,12 +416,22 @@ $(document).ready(function() {
 
         if ( action === 'FAI' ) {
 
+            $('[data-action=STA]').addClass('disabled');
             $('[data-action=COM]').addClass('disabled');
             $('[data-action=NEX]').removeClass('disabled');
             if ( notes === '' ) {
                 $('#notesModal').foundation('open');
                 return;
             }
+        }
+
+        if ( action === 'NEX' ) {
+
+            $('[data-action=NOS]').removeClass('disabled');
+            $('[data-action=STA]').removeClass('disabled');
+            $('[data-action=COM]').addClass('disabled');
+            $('[data-action=FAI]').addClass('disabled');
+            reason = null;
         }
 
         $.ajax({

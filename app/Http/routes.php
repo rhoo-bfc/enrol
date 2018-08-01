@@ -93,7 +93,7 @@ Route::post('/enrollee/status/{id}', function ($id) {
            }
            
         }
-        if ($assignment->asn_stats === 'NEX'){
+        if ($assignment->asn_status === 'NEX'){
 
             $allocation = new \App\Models\Allocate();
             $enrollee = $allocation->getNextInWaitingList( Request::instance()->session()->get('ats_que_id') );
