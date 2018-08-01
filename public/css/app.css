@@ -1,0 +1,307 @@
+.ticker {
+	font-weight:bold;	
+	font-size:2rem;
+	color:#FFFFFF;
+	background-color:#d21243;
+	padding:0.5rem;
+	display:block;
+}
+
+ul.marquee {
+	/* required styles */
+	display: block;
+	padding: 1rem;
+	margin: 0;
+	list-style: none;
+	position: relative;
+	overflow: hidden;
+
+	/* optional styles for appearance */
+
+	background-color:#d21243;
+}
+
+ul.marquee li {
+	/* required styles */
+	position: absolute;
+	top: -999em;
+	left: 0;
+	display: block;
+	white-space: nowrap; /* keep all text on a single line */
+	height:2.6rem;
+
+	/* optional styles for appearance */
+	color:#FFFFFF;
+	font-weight:600;
+	font-size:1.3rem
+}
+
+.mega-button {
+    
+    padding-top:4rem;
+    padding-bottom:4rem;
+    font-size:2rem;
+}
+
+.busyModal {
+    
+    border:5px solid #d21243;
+    width:400px;
+}
+
+.busyMessage {
+    
+    font-size:2em;
+    text-align: center;
+}
+
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.uil-ring-css {
+  background: none;
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.uil-ring-css > div {
+  position: absolute;
+  display: block;
+  width: 160px;
+  height: 160px;
+  top: 20px;
+  left: 20px;
+  border-radius: 80px;
+  box-shadow: 0 6px 0 0 #d21243;
+  -ms-animation: uil-ring-anim 1s linear infinite;
+  -moz-animation: uil-ring-anim 1s linear infinite;
+  -webkit-animation: uil-ring-anim 1s linear infinite;
+  -o-animation: uil-ring-anim 1s linear infinite;
+  animation: uil-ring-anim 1s linear infinite;
+}
+
+th {
+    text-transform: uppercase;
+    vertical-align: text-top;
+}
+
+td {
+   text-transform: uppercase;
+    vertical-align: text-top; 
+}
+
+.dashboard th {  
+  text-align:left;
+}
+
+.dashboard  {  
+  font-size:0.9rem;
+}
+
+.dashboard th {  
+  text-align:left;
+}
+
+.dashboard td {  
+  font-size:0.8rem;
+}
+
+.dash-summary h5 {
+    background-color:#d21243;
+    color:white;
+    padding-top:0.5rem;
+    padding-bottom:0.5rem;
+}
+
+.dash-summary p {
+    font-size:2.5rem;
+}
+
+.callouts th {
+    font-size:1.0em;
+    background-color:#757575;
+    color:#FFFFFF;
+    border-bottom:2px solid #FFFFFF;
+}
+
+.callouts td {
+    font-size:0.8em;
+    font-weight:600;
+    background-color:#d21243;
+    color:#FFFFFF;
+    border-bottom:2px solid #FFFFFF;
+    animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {  
+  50% { opacity: 0.0; }
+}
+
+.enrolShortly {
+   background-color:#fcd8e1;
+   padding:8px;
+   font-weight:600;
+   letter-spacing: 0.1rem;
+   display:block;
+   width:100%;
+}
+
+.qHeader {
+   font-size:1.5rem;
+   margin-top:10px;
+   text-transform: uppercase;  
+}
+
+.tickerMargin {
+    margin-bottom:20px;
+}
+
+#infoboard4 {
+    font-size:2em;
+}
+
+#infoboard4 .callout.primary {
+    background-color: #d21243;
+    color:#ffffff;
+}
+
+#infoboard4 .callouts td {
+    animation: none;
+    font-size:2.1em;
+    background-color: #FFFFFF;
+    color:#000000;
+    border-bottom:2px solid grey;
+}
+
+#infoboard4 .callouts th {
+    display:none;
+}
+
+#infoboard4 .dashboard td {
+    font-size:1.5em;
+}
