@@ -20,7 +20,7 @@ class Allocate
             return false;
         }
     
-        public function getNextInWaitingList( $queId ) {
+    public function getNextInWaitingList( $queId ) {
 		
 		$results = \DB::select("SELECT reg_id,
                 				       reg_first_name,
