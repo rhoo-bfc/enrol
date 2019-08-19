@@ -2,9 +2,19 @@
 
 namespace App\Models;
 
+/**
+ * Deals with the allocation of enrollee to service desks
+ * 
+ */
 class Allocate
 {
-	
+	/**
+         * Get the current enrollee assigned to a service desk/attendant
+         * 
+         * @param int $srcId - service desk id
+         * @param int $attId - attendent id
+         * @return boolean|array
+         */
 	public static function getCurrentEnrollee( $srcId, $attId ) {
             
             $results = \DB::select('SELECT * '
@@ -19,8 +29,14 @@ class Allocate
             
             return false;
         }
-    
-    public function getNextInWaitingList( $queId ) {
+        
+        /**
+         * 
+         * 
+         * @param int $queId - queue id
+         * @return boolean
+         */
+        public function getNextInWaitingList( $queId ) {
 		
 		$results = \DB::select("SELECT reg_id,
                 				       reg_first_name,
@@ -40,6 +56,12 @@ class Allocate
 		return false;		
 	}
 	
+        /**
+         * Gets the next available service desk for a queue
+         * 
+         * @param int $queId - queue id
+         * @return boolean
+         */
 	public function getNextAvailableServiceDesks( $queId ) {
 		
 		$results = \DB::select("SELECT att_email,
@@ -62,9 +84,15 @@ class Allocate
 		return false;
 	}
 	
+        /**
+         * Allocate a enrollee to a service desk/attendant session
+         * 
+         * @param int $atsId - attendant session id
+         * @param int $regId - registration id
+         */
 	public function createAllocation( $atsId, $regId ) {
 		
-		\DB::table('assignments')->insert(
+		return \DB::table('assignments')->insert(
 			[
 			 'asn_ats_id'       => $atsId, 
 			 'asn_reg_id'       => $regId,

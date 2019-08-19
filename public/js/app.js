@@ -3,22 +3,57 @@
 var positionsToShow = 20;
 
 window.rotateViews = false;
+window.fullViews   = false;
 
 window.panelHeaders = {
     
     'feed_queue_16_to_18'            : 'Next Up 18 and Under Enrolment',
     'feed_queue_19_plus'             : 'Next Up 19 Plus',
-    'feed_queue_missed_appointments' : 'Next Missed Appointments'
+    'feed_queue_missed_appointments' : 'Next Missed Appointments',
+    'feed_all_16_to_18'              : '18 and Under Enrolment',
+    'feed_all_19_plus'               : '19 Plus',
+    'feed_all_missed_appointments'   : 'Missed Appointments'
     
 };
 
 $(document).foundation();
 
+
+function doRollingMessages(view) {
+
+    var queues = {
+        'feed_queue_16_to_18'            : 1,
+        'feed_all_16_to_18'              : 1,
+        'feed_queue_19_plus'             : 2,
+        'feed_all_19_plus'               : 2,
+        'feed_queue_missed_appointments' : 3,
+        'feed_all_missed_appointments'   : 3,
+    };
+
+    if (typeof queues[view] != 'undefined' ) {
+
+        $.getJSON("/rollingmessage/" + queues[view], function (data) {
+
+            $("#feed-ticker").empty();
+            $(data).each(function (key, value) {
+
+                $("#feed-ticker").append('<li>' + value.rmg_message + '</li>')
+            });
+            $("#feed-ticker").marquee();
+
+        });
+    }
+}
+
 $(document).ready(function() {
     $('#clock').clock( { utc: false, utc_label: true, } );
-    $("#feed-ticker").marquee();
+
 });
 
+
+/**
+ * 
+ */
 var modal = {
     
     show : function() {
@@ -186,7 +221,7 @@ function renderInfoTable( view, target, page , offset, rows ) {
                   }
 
                   $(data.data).each(function(key, row) {
-                     table += '<tr>';
+                     table += '<tr">';
                      $(headers).each(function(key, value) {
                         table += '<td>' + row[value] + '</td>';  
                      }) 
@@ -212,17 +247,35 @@ function renderInfoTable( view, target, page , offset, rows ) {
         
         setTimeout(function() {
             
-            if ( (typeof window.rotateViews != 'undefined') && 
-                 ( window.rotateViews === true ) 
-               )  {
-            
+            if ( (typeof window.rotateViews != 'undefined') &&
+                ( window.rotateViews === true ) && (window.fullViews === false)
+            )  {
+
                 if ( view === 'feed_queue_16_to_18' ) {
                     view = 'feed_queue_19_plus';
                 } else if ( view === 'feed_queue_19_plus' ) {
                     view = 'feed_queue_16_to_18';
                 }
-            
-           }
+
+                doRollingMessages(view);
+            }
+
+            if ( (typeof window.rotateViews != 'undefined') &&
+                ( window.rotateViews === true ) && (window.fullViews === true)
+            )  {
+
+                if ( view === 'feed_all_16_to_18' ) {
+                    view = 'feed_all_19_plus';
+                } else if ( view === 'feed_all_19_plus' ) {
+                    view = 'feed_all_missed_appointments';
+                } else if ( view === 'feed_all_missed_appointments' ) {
+                    view = 'feed_all_16_to_18';
+                } else {
+                    view = 'feed_all_16_to_18';
+                }
+
+                doRollingMessages(view);
+            }
             
             renderInfoTable(view,target, page , offset, rows);
         }, 5000);
@@ -231,11 +284,36 @@ function renderInfoTable( view, target, page , offset, rows ) {
 
 $(document).ready(function() {
     
-    function renderTable( view, page) {
+    function renderTable( view, page, orderby, direction, search ) {
         
         modal.message('Refreshing - please wait');
         modal.show();
-        $.getJSON( "/feed/" + view + '?page=' + page , function( data ) {
+
+        var sort;
+        if (direction === undefined) {
+            sort = 'ASC';
+        } else if (direction === 'ASC') {
+            sort = 'DESC';
+        } else {
+            sort = 'ASC';
+        }
+
+        var extra = '';
+        if (orderby) {
+            extra = '&order=' + orderby + '&sort=' + direction;
+        }
+
+        var extra1 = '';
+        if (search) {
+            extra1 = '&search='+search;
+        }
+
+        var extra2 = '';
+        if ( $('[name="showInActive"]:checked').size() > 0 ) {
+            extra2 = '&hia=1'
+        }
+
+        $.getJSON( "/feed/" + view + '?page=' + page + extra + extra1 + extra2, function( data ) {
             
           var headers = data.data[0] ? Object.keys(data.data[0]) : [];
           
@@ -243,7 +321,7 @@ $(document).ready(function() {
           if ( headers ) {
            table += '<tr>';
            $(headers).each(function(key, value) {
-             table += '<th>' + value + '</th>';  
+             table += '<th><a data-direction="' + sort + '" data-view="' + view + '" data-order-by="' + value + '">' + value + '</a></th>';
            });    
            table += '</tr>';
           }
@@ -291,10 +369,21 @@ $(document).ready(function() {
           
           $('.pagination [href]').click(function() {
                 
-                renderTable( view , $(this).attr('data-page') );
+                renderTable( view , $(this).attr('data-page'), orderby, direction );
                 return false;
           });
           
+        });
+
+
+        $('[data-order-by]').click(function() {
+
+            renderTable( $(this).attr('data-view') ,
+                         1,
+                         $(this).attr('data-order-by') ,
+                         $(this).attr('data-direction') );
+            return false;
+
         });
     }
     
@@ -317,16 +406,55 @@ $(document).ready(function() {
         });
     });
     
-    $('#dashboard-tabs').on('change.zf.tabs', function(event) {
+    $('#dashboard-tabs, #admin-tabs').on('change.zf.tabs', function(event) {
 
         var view = $('div[data-tabs-content="'+$(this).attr('id')+'"]').find('.tabs-panel.is-active').attr('data-view');
-
         renderTable( view, 1 );
 
     });
+
+    $('#searchButton').click(function() {
+
+        var view = $('div').find('.tabs-panel.is-active').attr('data-view');
+        var searchTerm = $('[name="search"]').val();
+
+        renderTable( view, 1,undefined ,undefined, searchTerm );
+
+    });
+
+    $('[name="showInActive"]').click(function() {
+
+        var view = $('div').find('.tabs-panel.is-active').attr('data-view');
+        renderTable( view, 1,undefined ,undefined, undefined );
+
+    });
+
+    $( document ).on( "click", "[data-escalate]", function() {
+
+        var r = $(this).attr('data-escalate');
+        var rmTr = $(this).parent().parent();
+        $.getJSON( '/escalate/'+ r , function( data ) {
+
+            if ( data.STATUS === 'OK' ) {
+
+                var message = 'The applicant has been moved up the queue';
+                var messageBox = $('#messageTemplate').clone().css({'display':'block'});
+                $( messageBox ).find( '[data-message]' ).empty().append( message );
+                $('#dash-messages-container').empty().append( messageBox );
+
+                var view = $('div').find('.tabs-panel.is-active').attr('data-view');
+                renderTable( view, 1,undefined ,undefined, undefined );
+            }
+        });
+
+    });
+
+    $('#clearButton').click(function() {
+        $('[name="search"]').val('');
+    });
     
     $(document).ready(function() {
-        $('#dashboard-tabs').trigger('change.zf.tabs');
+        $('#dashboard-tabs, #admin-tabs').trigger('change.zf.tabs');
     });
     
     $( '[data-queue="SWITCH"]' ).change(function() {
@@ -393,7 +521,6 @@ $(document).ready(function() {
         if ( action === 'STA' ) {
 
             $('[data-action=NOS]').addClass('disabled');
-            $('[data-action=NEX]').addClass('disabled');
             $('[data-action=COM]').removeClass('disabled');
             $('[data-action=FAI]').removeClass('disabled');
             reason = null;
@@ -402,36 +529,22 @@ $(document).ready(function() {
         if ( action === 'NOS' ) {
 
             $('[data-action=STA]').addClass('disabled');
-            $('[data-action=NEX]').removeClass('disabled');
             reason = null;
         }
 
         if ( action === 'COM' ) {
 
-            $('[data-action=STA]').addClass('disabled');
             $('[data-action=FAI]').addClass('disabled');
-            $('[data-action=NEX]').removeClass('disabled');
             reason = null;
         }
 
         if ( action === 'FAI' ) {
 
-            $('[data-action=STA]').addClass('disabled');
             $('[data-action=COM]').addClass('disabled');
-            $('[data-action=NEX]').removeClass('disabled');
             if ( notes === '' ) {
                 $('#notesModal').foundation('open');
                 return;
             }
-        }
-
-        if ( action === 'NEX' ) {
-
-            $('[data-action=NOS]').removeClass('disabled');
-            $('[data-action=STA]').removeClass('disabled');
-            $('[data-action=COM]').addClass('disabled');
-            $('[data-action=FAI]').addClass('disabled');
-            reason = null;
         }
 
         $.ajax({
@@ -443,7 +556,7 @@ $(document).ready(function() {
                 modal.show();
             },
             success:function(res){
-                
+
                 if ( res.STATUS === 'OK' ) {
                     modal.hide();
                 }
@@ -471,14 +584,12 @@ $(document).ready(function() {
         if ( true === $('#system-online').is(':checked') ) {
 
           $.getJSON( "/admin/config/system_status?val=1", function(data) {
-            console.log( data );
           });
 
 
         } else {
 
           $.getJSON( "/admin/config/system_status?val=0", function(data) {
-            console.log( data );
           });
         }
 

@@ -28,7 +28,7 @@
         </div>
         -->
         
-        <button class="secondary button " id="expireServiceDesks">Expire Service Desks</button>
+        <!-- <button class="secondary button " id="expireServiceDesks">Expire Service Desks</button> -->
     </div>
     
     <div class="columns small-9" id="dash-messages-container">
@@ -82,6 +82,23 @@
 </script>
 
 <div class="row">
+
+
+    <div class="small-6 large-6 columns">
+            <input type="text" name="search" placeholder="Enrolle Name Search">
+    </div>
+    <div class="small-3 large-3 columns">
+        <button class="button expanded" id="clearButton">Clear</button>
+    </div>
+    <div class="small-3 large-3 columns">
+        <button class="button expanded" id="searchButton">Search</button>
+    </div>
+
+
+</div>
+
+
+<div class="row">
     <div class="small-12 large-12 small-centered columns">
        
         <ul class="tabs" data-tabs id="dashboard-tabs">
@@ -130,15 +147,46 @@
     </div>
 </div>
 
+
+<div class="reveal" id="revertModal" data-reveal>
+  <h1>Restore to Queue at :</h1>
+  
+  <div class="row">
+    
+    <input type="hidden" name="revertId" id="revertId" value="" />
+    <div class="small-12 large-4 columns">
+        <a class="secondary button mega-button small-12" data-revert-position='F' >Front</a>       
+    </div>
+    
+    <div class="small-12 large-4 columns">
+            
+            <a class="secondary button mega-button small-12" data-revert-position='C' >Current</a>  
+    </div>
+    
+    
+    <div class="small-12 large-4 columns">
+        
+             <a class="secondary button mega-button small-12" data-revert-position='B' >Back</a>      
+    </div>
+  </div>
+  
+  
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
 <script>
-   
-   $( document ).on( "click", "[data-revert]", function() {
-       
+    
+   $('[data-revert-position]').click(function() {
+      
+       var position = $(this).attr('data-revert-position');
+      
        modal.message('Refreshing - please wait');
        modal.show();
        
-       var rmTr = $(this).parent().parent();
-       $.getJSON( '/admin/reinstate/' + $(this).attr( 'data-revert' ) , function( data ) {
+       var rmTr = $("[data-revert=" + $('#revertId').val() + "]").parent().parent();
+       $.getJSON( '/admin/reinstate/' + $('#revertId').val() + '/' + position , function( data ) {
            
            modal.hide();
            
@@ -153,8 +201,83 @@
             }
            
        });
+      
+      
+   });
+   
+   $( document ).on( "click", "[data-revert]", function() {
+       
+       $('#revertId').val( $(this).attr( 'data-revert' ) );  
+       $('#revertModal').foundation('open');
+       return;
        
    });
+
+   $( document ).on( "click", "[data-enrol]", function() {
+
+       var r = $(this).attr('data-enrol');
+       var rmTr = $(this).parent().parent();
+       $.getJSON( '/move/'+ r +'/COM/' , function( data ) {
+
+           if ( data.STATUS === 'OK' ) {
+
+               var message = 'The applicant has been moved to enrol';
+               var messageBox = $('#messageTemplate').clone().css({'display':'block'});
+               $( messageBox ).find( '[data-message]' ).empty().append( message );
+               $('#dash-messages-container').empty().append( messageBox );
+
+               $(rmTr).remove();
+           }
+       });
+
+   });
+
+   $( document ).on( "click", "[data-nos]", function() {
+
+       var r = $(this).attr('data-nos');
+       var rmTr = $(this).parent().parent();
+       $.getJSON( '/move/nos/'+ r , function( data ) {
+
+           if ( data.STATUS === 'OK' ) {
+
+               var message = 'The applicant has been moved to no shows';
+               var messageBox = $('#messageTemplate').clone().css({'display':'block'});
+               $( messageBox ).find( '[data-message]' ).empty().append( message );
+               $('#dash-messages-container').empty().append( messageBox );
+
+               $(rmTr).remove();
+
+           }
+       });
+
+   });
+
+
+
+   $( document ).on( "click", "[data-switch-queue]", function() {
+
+       var r = $(this).attr('data-switch-queue');
+       var s = $(this).attr('data-uuid');
+       var rmTr = $(this).parent();
+
+
+
+       $.getJSON( '/queue/' + s + '/' + r , function( data ) {
+
+           if ( data.STATUS === 'OK' ) {
+
+               var message = 'The service desk has been scheduled to move queues';
+               var messageBox = $('#messageTemplate').clone().css({'display':'block'});
+               $( messageBox ).find( '[data-message]' ).empty().append( message );
+               $('#dash-messages-container').empty().append( messageBox );
+
+               $(rmTr).empty().append('IN PROGRESS');
+
+           }
+       });
+
+   });
+
    
    $( document ).on( "click", "[data-expire]", function() {
        

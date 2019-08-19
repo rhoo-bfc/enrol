@@ -87,7 +87,7 @@ BEGIN
 	asn_created_ts,
 	asn_completed_ts,
 	asn_notes
-	FROM `enrol`.`assignments`;
+	FROM `assignments`;
 	DELETE FROM assignments;
 
 	INSERT INTO service_attendant_sessions_archive

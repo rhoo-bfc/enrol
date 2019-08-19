@@ -16,7 +16,15 @@
         
         <a class="expanded button" href="/infoboard/4">Now Serving & Next Up 18 and Under Enrolment</a>
         
+        <a class="expanded button" href="/infoboard/5">Now Serving & University College Enrolment</a>
+
+        <a class="expanded button" href="/infoboard/6">2019 - All Queues</a>
+        
+        <a class="expanded button" href="/search">Search</a>
+        
         <a class="expanded button" href="/dashboard">Dashboard</a>
+
+        <a class="expanded button" href="/admin">Admin - Service Desks & Attendants</a>
         
     </div>
 </div>

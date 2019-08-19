@@ -63,7 +63,30 @@
 
 <div class="row">
     
-    <div class="columns small-12 " >
+    <div class="columns small-3 " >
+        
+        <div class="callout alert">
+        16 to 18
+        <span class="alert badge">{{ $queue_counts['16-18'] }}</span>
+        </div>
+       
+    </div>
+    
+    <div class="columns small-3 " >
+        <div class="callout success">
+        19 plus
+        <span class="success badge">{{ $queue_counts['19+'] }}</span>
+        </div>
+    </div>
+    
+    <div class="columns small-3 " >
+        <div class="callout warning">
+        Missed Appointments
+        <span class="warning badge">{{ $queue_counts['Missed Appointments'] }}</span>
+        </div>
+    </div>
+    
+    <div class="columns small-3 " >
  
         <a href="/logout" class="button float-right">Logout</a>
     
@@ -103,10 +126,24 @@
             <h2>{{ displayFriendly( $enrollee->reg_first_name ) }} {{ displayFriendly( $enrollee->reg_last_name ) }}</h2>
             <h2>DOB : {{ to_uk_date($enrollee->reg_dob) }}</h2>
             @else
-            <h2>No enrollee assigned</h2>
-            <script>
             
-            setTimeout( function() { modal.pollRefresh(); } , 5000);
+            <!--<h2>No enrollee assigned</h2>-->
+            
+            <a class="secondary button mega-button small-12" data-id="pull-next-button">Next Enrollee</a>
+            
+            <script>
+                
+            $('[data-id="pull-next-button"]').click(function(){
+               
+               $.getJSON( "/attendant/ready", function( data ) {
+                   if ( data.STATUS === 'ALLOCATED' ) {
+                       location.reload(); 
+                   } 
+               });
+               
+            });
+            
+            //setTimeout( function() { modal.pollRefresh(); } , 5000);
             
             </script>
             @endif
@@ -118,36 +155,30 @@
 
 @if( $enrollee )
 <input type="hidden" name="id" value="{{ $enrollee->asn_id }}" />
-
 <div class="row">
     
-    <div class="small-12 large-6 columns">
+    <div class="small-12 large-3 columns">
         
         <a class="secondary button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="STA" >Started <br />Enrolment</a>       
         
     </div>
-
-    <div class="small-12 large-6 columns">
+    
+    <div class="small-12 large-3 columns">
         
-        <a class="button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="NOS" >No <br />Show</a>      
+            <a class="button mega-button small-12 @if($enrollee->asn_status === 'STA') disabled @endif" data-action="NOS" >No <br />Show</a>      
         
     </div>
-
-    <div class="small-12 large-4 columns">
+    
+    
+    <div class="small-12 large-3 columns">
         
-        <a class="success mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="COM" >Enrolment <br />Completed&nbsp;</a>
+             <a class="success mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="COM" >Enrolment <br />Completed&nbsp;</a>
            
     </div>
     
-    <div class="small-12 large-4 columns">
+    <div class="small-12 large-3 columns">
         
-        <a class="secondary mega-button button small-12 @if(!$enrollee->asn_status) disabled disabled @endif" data-action="NEX" >Next <br />Enrolee</a>
-         
-    </div>
-
-    <div class="small-12 large-4 columns">
-        
-        <a class="warning mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="FAI" >Unable to <br />Enrol</a>
+              <a class="warning mega-button button small-12 @if(!$enrollee->asn_status) disabled @endif" data-action="FAI" >Unable to <br />Enrol</a>
          
     </div>
     

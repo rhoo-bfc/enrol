@@ -4,7 +4,10 @@ namespace App\Models;
 
 class Session
 {
-	
+	/**
+         * Clears all attendant sessions (log all the attendants out)
+         * 
+         */
 	public static function clearAllSessions(  ) {
             
             return \DB::table('service_attendant_sessions')
@@ -13,6 +16,12 @@ class Session
             
         }
         
+        /**
+         * Remove any enrollees that have been assigned to a service desk that 
+         * is now closed.  Puts them back in the queue, should go straight to 
+         * the front.
+         * 
+         */
         public static function clearClosedAssignments( ) {
             
             return \DB::update('DELETE
@@ -25,6 +34,12 @@ class Session
             
         }
         
+        /**
+         * Clears a session for a attendant
+         * 
+         * @param int $attId
+         * @return int
+         */
         public static function clearSessionsByAttendant( $attId ) {
             
             return \DB::table('service_attendant_sessions')
@@ -33,6 +48,11 @@ class Session
                     ->update( ['ats_end_ts' => \DB::raw('NOW()')] );
         }
         
+        /**
+         * Check for a valid session
+         * 
+         * @return boolean
+         */
         public static function isValidSession() {
             
             $result = \DB::select("SELECT COUNT(*) session

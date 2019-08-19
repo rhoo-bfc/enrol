@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * 
+ * 
+ */
 class Message extends Model
 {
 
@@ -15,6 +20,14 @@ class Message extends Model
 
     public    $timestamps  = false;
     
+    /**
+     * Determines whether an enrollee has already received a text message
+     * 
+     * @param type $regId
+     * @param type $queId
+     * @param type $mtpId
+     * @return type
+     */
     private function alreadySent( $regId, $queId, $mtpId ) {
         
         return ( \DB::table('messages')->
@@ -24,6 +37,14 @@ class Message extends Model
                       count() === 0 ) ? false : true;
     }
     
+    /**
+     * Sends a sms notiication to an enrollee
+     * 
+     * @param array $enrolleeDetails
+     * @param int $mtpId
+     * @return boolean
+     * 
+     */
     public function sendSmsMessage( $enrolleeDetails, $mtpId = 1 ) {
         
         if ( false === $this->alreadySent( $enrolleeDetails['regId'] , $enrolleeDetails['queId'], $mtpId ) ) {
